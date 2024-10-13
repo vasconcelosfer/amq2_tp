@@ -1,0 +1,11 @@
+EJEMPLO TRUE
+
+$jsonBody = '{"features": {"age": 13,"ca": 3,"chol": 286,"cp": 4,"exang": 1,"fbs": 0,"oldpeak": 1.5,"restecg": 2,"sex": 1,"slope": 2,"thal": 3,"thalach": 51,"trestbps": 160}}'
+
+Invoke-RestMethod -Uri 'http://localhost:8800/predict/' -Method Post -Headers @{ 'Accept' = 'application/json'; 'Content-Type' = 'application/json' } -Body $jsonBody
+
+EJEMPLO FALSE
+
+$jsonBody = '{"features": {"age": 63,"ca": 0,"chol": 180,"cp": 1,"exang": 0,"fbs": 1,"oldpeak": 2.3,"restecg": 2,"sex": 1,"slope": 3,"thal": 6,"thalach": 150,"trestbps": 145}}'
+
+Invoke-RestMethod -Uri 'http://localhost:8800/predict/' -Method Post -Headers @{ 'Accept' = 'application/json'; 'Content-Type' = 'application/json' } -Body $jsonBody
