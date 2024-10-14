@@ -13,6 +13,9 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
+# For debug purpose
+# import pydevd_pycharm
+# pydevd_pycharm.settrace('172.17.0.1', port=5678, stdoutToServer=True, stderrToServer=True)
 
 def load_model(model_name: str, alias: str):
     try:
@@ -22,8 +25,9 @@ def load_model(model_name: str, alias: str):
 
         model_data_mlflow = client_mlflow.get_model_version_by_alias(model_name, alias)
         model_ml = mlflow.sklearn.load_model(model_data_mlflow.source)
+
         version_model_ml = int(model_data_mlflow.version)
-    except:
+    except Exception as e:
         print('No hay un modelo registrado')
 
     return model_ml, version_model_ml
@@ -196,7 +200,7 @@ class ModelOutput(BaseModel):
 
 
 # Load the model before start
-model, version_model = load_model("customer_satisfaction_model_prod", 1)
+model, version_model = load_model("customer_satisfaction_model_prod", 'champion')
 
 app = FastAPI()
 
@@ -258,7 +262,7 @@ def predict(
     for col in ['flight_distance', 'departure_delay_in_minutes', 'arrival_delay_in_minutes']:
             dict_q95 = {'flight_distance': 3376, 'departure_delay_in_minutes': 77, 'arrival_delay_in_minutes': 78}
 
-            features_df[col]= np.where(features_df[col]>dict_q95[col], dict_q95[col], features_df[col])
+            features_df[col]= np.where(int(features_df[col])>dict_q95[col], dict_q95[col], features_df[col])
 
     #Mantenemos en el dataset las features input del modelo
     features_input = ['age', 'class_cus', 'flight_distance', 'inflight_wifi_service',
@@ -267,13 +271,13 @@ def predict(
     'inflight_entertainment', 'on_board_service', 'leg_room_service',
     'baggage_handling', 'checkin_service', 'inflight_service',
     'cleanliness', 'departure_delay_in_minutes', 'arrival_delay_in_minutes',
-    'target', 'gender_male', 'customer_type_disloyal_customer',
+    'gender_male', 'customer_type_disloyal_customer',
     'type_of_travel_personal_travel', 'inflight_wifi_service_rta0',
     'departure_arrival_time_convenient_rta0', 'ease_of_online_booking_rta0',
     'online_boarding_rta0']
     
     features_df = features_df[features_input]
-
+    features_df = features_df.to_numpy()
     # Predict usando el modelo 
     prediction = model.predict(features_df)
 
