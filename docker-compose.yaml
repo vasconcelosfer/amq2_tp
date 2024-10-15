@@ -300,6 +300,46 @@ services:
     volumes:
       - ${AIRFLOW_PROJ_DIR:-./airflow}:/sources
 
+  backend:
+    build:
+      context: ./dockerfiles/reflex_app
+      dockerfile: Dockerfile
+    container_name: reflex_backend
+    profiles:
+      - all
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+      - fastapi
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./dockerfiles/reflex_app:/app
+  frontend:
+    build:
+      context: ./dockerfiles/reflex_app
+      dockerfile: web.Dockerfile
+    container_name: reflex_frontend
+    profiles:
+      - all
+    ports:
+      - 3000:80
+    depends_on:
+      - backend
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./dockerfiles/reflex_app/:/app
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - frontend
+      - backend
+
 networks:
   frontend:
     driver: bridge
