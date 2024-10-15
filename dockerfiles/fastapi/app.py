@@ -170,15 +170,6 @@ class ModelInput(BaseModel):
 
 
 class ModelOutput(BaseModel):
-    """
-    Output schema for the heart disease prediction model.
-
-    This class defines the output fields returned by the heart disease prediction model along with their descriptions
-    and possible values.
-
-    :param int_output: Output of the model. True if the patient has a heart disease.
-    :param str_output: Output of the model in string form. Can be "Healthy patient" or "Heart disease detected".
-    """
 
     int_output: bool = Field(
         description="Output del modelo. 'true' si el usuario esta satisfecho",
@@ -200,18 +191,14 @@ class ModelOutput(BaseModel):
 
 
 # Load the model before start
-model, version_model = load_model("customer_satisfaction_model_prod", 'champion')
+model, version_model = load_model("customer_satisfaction_model_prod", 'prod')
 
 app = FastAPI()
 
 
 @app.get("/")
 async def read_root():
-    """
-    Root endpoint of the Heart Disease Detector API.
 
-    This endpoint returns a JSON response with a welcome message to indicate that the API is running.
-    """
     return JSONResponse(content=jsonable_encoder({"message": "Bienvenido al predictor de satisfaccion del usuario API"}))
 
 
@@ -223,12 +210,7 @@ def predict(
     ],
     background_tasks: BackgroundTasks
 ):
-    """
-    Endpoint for predicting heart disease.
 
-    This endpoint receives features related to a patient's health and predicts whether the patient has heart disease
-    or not using a trained model. It returns the prediction result in both integer and string formats.
-    """
     
     # Extract features from the request and convert them into a list and dictionary
     features_list = [*features.dict().values()]
