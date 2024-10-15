@@ -108,6 +108,22 @@ services:
       exit 0;
       '
 
+  copy_data_to_s3:
+      build: "./dockerfiles/minio_copy"
+      container_name: minio_copy_bucket
+      depends_on:
+        create_s3_buckets:
+          condition: service_completed_successfully
+      networks:
+        - backend
+      entrypoint: >
+        /bin/sh -c '
+        sleep 5;
+        /usr/bin/mc config host add s3 http://s3:9000 ${MINIO_ACCESS_KEY:-minio} ${MINIO_SECRET_ACCESS_KEY:-minio123} --api S3v4;
+        /usr/bin/mc cp /df_total.parquet s3/${DATA_REPO_BUCKET_NAME:-data}/raw/df_total.parquet;
+        exit 0;
+        '
+
   mlflow:
     restart: always
     build: "./dockerfiles/mlflow"

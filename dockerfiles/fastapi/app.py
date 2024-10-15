@@ -200,7 +200,7 @@ class ModelOutput(BaseModel):
 
 
 # Load the model before start
-model, version_model = load_model("customer_satisfaction_model_prod", 'champion')
+model, version_model = load_model("customer_satisfaction_model_prod", 'prod')
 
 app = FastAPI()
 
