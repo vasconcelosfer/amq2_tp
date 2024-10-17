@@ -108,6 +108,22 @@ services:
       exit 0;
       '
 
+  copy_data_to_s3:
+      build: "./dockerfiles/minio_copy"
+      container_name: minio_copy_bucket
+      depends_on:
+        create_s3_buckets:
+          condition: service_completed_successfully
+      networks:
+        - backend
+      entrypoint: >
+        /bin/sh -c '
+        sleep 5;
+        /usr/bin/mc config host add s3 http://s3:9000 ${MINIO_ACCESS_KEY:-minio} ${MINIO_SECRET_ACCESS_KEY:-minio123} --api S3v4;
+        /usr/bin/mc cp /df_total.parquet s3/${DATA_REPO_BUCKET_NAME:-data}/raw/df_total.parquet;
+        exit 0;
+        '
+
   mlflow:
     restart: always
     build: "./dockerfiles/mlflow"
@@ -299,6 +315,46 @@ services:
     user: "0:0"
     volumes:
       - ${AIRFLOW_PROJ_DIR:-./airflow}:/sources
+
+  backend:
+    build:
+      context: ./dockerfiles/reflex_app
+      dockerfile: Dockerfile
+    container_name: reflex_backend
+    profiles:
+      - all
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+      - fastapi
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./dockerfiles/reflex_app:/app
+  frontend:
+    build:
+      context: ./dockerfiles/reflex_app
+      dockerfile: web.Dockerfile
+    container_name: reflex_frontend
+    profiles:
+      - all
+    ports:
+      - 3000:80
+    depends_on:
+      - backend
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./dockerfiles/reflex_app/:/app
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - frontend
+      - backend
 
 networks:
   frontend:

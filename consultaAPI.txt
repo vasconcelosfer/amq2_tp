@@ -1,11 +1,15 @@
-EJEMPLO TRUE
+EJEMPLO DE USUARIO INSATISFECHO: 
 
-$jsonBody = '{"features": {"age": 13,"ca": 3,"chol": 286,"cp": 4,"exang": 1,"fbs": 0,"oldpeak": 1.5,"restecg": 2,"sex": 1,"slope": 2,"thal": 3,"thalach": 51,"trestbps": 160}}'
+curl -s -X POST http://localhost:8800/predict/ \
+     -H "Content-Type: application/json" \
+     -d '{"features":{ "gender":"Female","customer_type":"Loyal Customer","age":40,"type_of_travel":"Personal Travel","class_cus":"Business","flight_distance":400,"inflight_wifi_service":4,"departure_arrival_time_convenient":4,"ease_of_online_booking":4,"gate_location":4,"food_and_drink":4,"online_boarding":4,"seat_comfort":4,"inflight_entertainment":4,"on_board_service":4,"leg_room_service":4,"baggage_handling":4,"checkin_service":4,"inflight_service":4,"cleanliness":4,"departure_delay_in_minutes":0,"arrival_delay_in_minutes":0}}'
 
-Invoke-RestMethod -Uri 'http://localhost:8800/predict/' -Method Post -Headers @{ 'Accept' = 'application/json'; 'Content-Type' = 'application/json' } -Body $jsonBody
+	RPTA: {"int_output":false,"str_output":"Usuario no satisfecho"}
 
-EJEMPLO FALSE
+EJEMPLO DE USUARIO INSATISFECHO: 
 
-$jsonBody = '{"features": {"age": 63,"ca": 0,"chol": 180,"cp": 1,"exang": 0,"fbs": 1,"oldpeak": 2.3,"restecg": 2,"sex": 1,"slope": 3,"thal": 6,"thalach": 150,"trestbps": 145}}'
+curl -s -X POST http://localhost:8800/predict/ \
+     -H "Content-Type: application/json" \
+     -d '{"features":{ "gender":"Female","customer_type":"Loyal Customer","age":40,"type_of_travel":"Personal Travel","class_cus":"Business","flight_distance":400,"inflight_wifi_service":5,"departure_arrival_time_convenient":5,"ease_of_online_booking":5,"gate_location":5,"food_and_drink":5,"online_boarding":5,"seat_comfort":5,"inflight_entertainment":5,"on_board_service":5,"leg_room_service":5,"baggage_handling":5,"checkin_service":5,"inflight_service":5,"cleanliness":5,"departure_delay_in_minutes":0,"arrival_delay_in_minutes":0}}'
 
-Invoke-RestMethod -Uri 'http://localhost:8800/predict/' -Method Post -Headers @{ 'Accept' = 'application/json'; 'Content-Type' = 'application/json' } -Body $jsonBody
+	RPTA: {"int_output":true,"str_output":"Usuario satisfecho"}
