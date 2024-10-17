@@ -1,5 +1,7 @@
 AMq2 - CEIA - FIUBA
 
+Autores: Fernando Vasconcelos, Lara Rosenberg, Gustavo Uñapillco, Victoria Terán.
+
 En este repositorio dejamos una implementación de un modelo productivo para detectar si un usuario se encontrará o no satisfecho con el servicio brindado por una aerolínea comercial. 
 
 La implementación incluye:
