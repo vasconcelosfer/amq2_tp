@@ -18,66 +18,6 @@ Ejecuta la notebook (ubicada en notebook_example) para entrenar el mejor modelo.
 Utiliza el servicio de API.
 
 
-API
+Realizar Predicciones
 
-Podemos realizar predicciones utilizando la API, accediendo a http://localhost:8800/.
-
-Para hacer una predicción, debemos enviar una solicitud al endpoint Predict con un cuerpo de tipo JSON que contenga un campo de características (features) con cada entrada para el modelo.
-
-Un ejemplo del json sería:
-
-
-
-{
-
-                'gender':'Female',
-
-                'customer_type': 'Loyal customer',
-
-                'age': 40,
-
-                'type_of_travel': 'Personal Travel',
-
-                'class_cus': 'Business',
-
-                'flight_distance': 400,
-
-                'inflight_wifi_service': 4,
-
-                'departure_arrival_time_convenient': 4,
-
-                'ease_of_online_booking':4,
-
-                'gate_location':4,
-
-                'food_and_drink':4,
-
-                'online_boarding':4,
-
-                'seat_comfort':4,
-
-                'inflight_entertainment':4,
-
-                'on_board_service':4,
-
-                'leg_room_service':4,
-
-                'baggage_handling':4,
-
-                'checkin_service':4,
-
-                'inflight_service':4,
-
-                'cleanliness':4,
-
-                'departure_delay_in_minutes':0,
-
-                'arrival_delay_in_minutes':0
-
-
-
-                }
-
-
-
-La respuesta del modelo será un valor booleano y un mensaje en forma de cadena de texto que indicará si el usuario se encontrará o no satisfecho con el servicio brindado por la aerolínea.
+Para llevar a cabo una predicción, se puede utilizar nuestra API. Para ello desarrollamos un frontend accesible en la siguiente ruta: http://localhost:3000/, donde se podrá introducir las características requeridas por el modelo y una vez completas las entradas, se realiza la predicción que indicará si el usuario se encontrará o no satisfecho con el servicio brindado por la aerolínea.
